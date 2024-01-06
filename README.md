@@ -1,9 +1,7 @@
 # AlphaNeural AI Application
 
 ## Backend
-```
-User Authentication and Authorization System: Implement a secure login system with JWT (JSON Web Tokens) or OAuth for user authentication and role-based access control.
-```
+> User Authentication and Authorization System: Implement a secure login system with JWT (JSON Web Tokens) or OAuth for user authentication and role-based access control.
 * Database Design and Management: Set up databases (e.g., MongoDB, PostgreSQL) to store user data, uploaded datasets, AI models, and blockchain transaction records.
 * API for Data Upload: Develop RESTful APIs to handle the uploading of data by users in various formats (CSV, JSON, XML, images, text files).
 * Data Validation and Processing Service: Create services to validate the format and integrity of the uploaded data, and preprocess it for storage and training.
