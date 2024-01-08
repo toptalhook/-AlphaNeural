@@ -5,6 +5,45 @@ import bcrypt from 'bcrypt-nodejs';
 const { Types } = require("mongoose");
 
 export default {
+
+    signupT: (req, res, next) => {
+
+        const { firstName, lastName, emailAddress, password, confirmPassword, location, role, bio, checkProductUpdates, checkCommunityAnnouncementes, dataVerificationUpdates, accountNotification, paymentMethod } = req.body;
+        console.log(req.body);
+ 
+        const user = new UserModel({
+            firstName: firstName.toLowerCase,
+            lastName: lastName.toLowerCase,
+            emailAddress: emailAddress,
+            password: password,
+            location: location,
+            role: role,
+            bio: bio,
+            checkProductUpdates: checkProductUpdates,
+            checkCommunityAnnouncementes: checkCommunityAnnouncementes,
+            dataVerificationUpdates: dataVerificationUpdates,
+            accountNotification: accountNotification,
+            paymentMethod: paymentMethod
+        })
+
+        user.save((err, savedUser) => {
+            if (err) {
+                return next(err)
+            }
+            res.json({
+                success: true,
+                token: token.generateToken(savedUser)
+            })
+        })
+    },
+
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     * @returns 
+     */
     signup: (req, res, next) => {
 
         const { username, password, firstName, lastName, confirmPassword } = req.body;
@@ -16,7 +55,7 @@ export default {
         if (password !== confirmPassword) {
             return res
                 .status(422)
-                .send({ error: 'You must confirm password.' });
+                .send({ error: 'Invalidate confirm password.' });
         }
 
         if (!username || !password) {

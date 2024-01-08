@@ -6,48 +6,51 @@ const moment = require('moment-timezone');
 
 // Define the model
 const Schema = new mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    userName: {
+    firstName: 
+    {
         type: String,
-        unique: true,
+        required: true,
     },
-    nickName: {
-        type: String
+    lastName: 
+    {
+        type: String,
+        required: true
     },
-    group: String,
+    emailAddress: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        rquired: true,
+    },
+    location: {
+        type: String,
+        required: true
+    },
     role: {
-        type: String,
-        default: "General"
+        type: Number,
+        default: 0
     },
-    password: String,
-    approve: {
+    bio: {
+        type: String,
+        required: true
+    },
+    checkProductUpdates: {
         type: Boolean,
         default: false
     },
-    stacks: String,
-    birthday: {
-        type: Date,
+    checkCommunityAnnouncementes: {
+        type: Boolean,
+        default: false
     },
-    ipAddress: {
-        type: String,
-        default: null
+    dataVerificationUpdates: {
+        type: Boolean,
+        default: false
     },
-    ipMsgId: {
-        type: String,
-        default: null
-    },
-    netKeyId: {
-        type: String,
-        default: null
-    },
-    teamNo: {
-        type: String,
-        default: null
-    },
-    roomNo: {
-        type: String,
-        default: null
+    accountNotification: {
+        type: Boolean,
+        default: false
     },
     createdAt: {
         type: Date,
@@ -57,15 +60,13 @@ const Schema = new mongoose.Schema({
         type: Date,
         default: null,
     },
-    sex: {
+    paymentMethod: {
         type: String,
-        default: null
-    },
-    group: String
-    
+        default: ""
+    }
 }, { timestamps: { updatedAt: 'updatedAt' } });
 
-Schema.plugin(timeZone, { path: ['createdAt', 'birthday'] });
+Schema.plugin(timeZone, { path: ['createdAt'] });
 
 Schema.pre('save', function (next) {
     // get access to user model, then we can use user.email, user.password

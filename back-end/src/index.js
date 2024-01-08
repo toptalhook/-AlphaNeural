@@ -31,7 +31,7 @@ import moment from 'moment-timezone';
 import logger from './utils/logger';
 import config from './constant/config';
 import routes from './routes/routes';
-
+import { connectDatabase } from "./utils/dblink";
 /**
  * @author Lee Jin
  * @title AlphaNeural AI application.
@@ -48,7 +48,7 @@ import routes from './routes/routes';
         It also enables the use of middleware functions for tasks such as logging, authentication, handling errors, and more. 
         Middleware functions in Express have access to the request and response objects, allowing you to modify them or perform additional operations.
         The flexibility and simplicity of Express make it a popular choice among Node.js developers for building web applications and APIs.
-*/ 
+ */ 
 const app = express();
 
 /**
@@ -87,7 +87,7 @@ app.use(express.urlencoded({ extended: false }));
 /**
  * @notice html handling in node js
  */
-app.set('view engine', hbs)
+// app.set('view engine', hbs)
 
 /**
  * @notice All reuest are handled in routes.
@@ -105,9 +105,19 @@ app.use((err, req, res, next) => {
 });
 
 /**
+ * @notice Main function
+ */
+function main() {
+    connectDatabase();
+    // timevar = setTimeout(timeBetting, timeout);
+}
+  
+main();
+
+/**
  * @notice sever starts with port
  * @dev listening requests and handle response
  */
 app.listen(config.port, () => {
-    logger.info(`Server listening on: ${port}`)
+    logger.info(`Server listening on: ${config.port}`)
 });
