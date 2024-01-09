@@ -3,4 +3,5 @@
 .git
 front-end/node_modules
 /back-end/.env
+/back-end/.env.example
 /front-end/.env
