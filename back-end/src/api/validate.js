@@ -122,7 +122,7 @@ export default {
         var checkedData = {};
         checkedData = userNameCheck(userName);
 
-        console.log("user name check", checkedData);
+        // console.log("user name check", checkedData);
 
         if(checkedData.flag == false) {
             return checkedData;
@@ -140,7 +140,7 @@ export default {
             return checkedData;
         }
 
-        console.log("password check", checkedData);
+        // console.log("password check", checkedData);
 
         if (password !== confirmPassword) {
             return {
@@ -150,7 +150,7 @@ export default {
         }
 
         checkedData = userEmailAddressCheck(emailAddress);
-        console.log("emailAddress check", checkedData);
+        // console.log("emailAddress check", checkedData);
 
         return checkedData;
     }

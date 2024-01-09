@@ -26,11 +26,15 @@ export default {
 
         const { userName, companyName, emailAddress, password, confirmPassword } = req.body;
 
-        ValidateData.signUpCheck(userName, companyName, emailAddress, password, confirmPassword);
+        const checkedData = ValidateData.signUpCheck(userName, companyName, emailAddress, password, confirmPassword);
+        console.log("validate", checkedData);
+        if(!checkedData.flag) {
+            return res.status(421).send(checkedData.error);
+        }
 
         UserModel
             .findOne({
-                userName: username
+                emailAddress: emailAddress
             }, (err, existingUser) => {
 
                 if (err) return res.status(422).send(err);
@@ -38,7 +42,7 @@ export default {
                 if (existingUser) {
                     return res
                         .status(425)
-                        .send({ error: 'Username is in use' });
+                        .send({ error: 'Registered user' });
                 }
 
                 const user = new UserModel({
