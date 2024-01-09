@@ -26,6 +26,7 @@ export default {
     //VerifyToken
     token.verifyToken(try_token, (err, payload) => {
       if (err) return res.status(401).send(err);
+      //Find a jwt token
       UserModel.findById(payload.sub)
         .exec((err, user) => {
           if (err || !user) {

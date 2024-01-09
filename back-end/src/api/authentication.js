@@ -1,76 +1,32 @@
 import token from '../utils/token';
 import UserModel from '../user/model';
 import bcrypt from 'bcrypt-nodejs';
+import ValidateData from './validate';
+
+/**
+ * @author Lee Jin
+ * @title Application Authenticaton
+ * @notice User Signup, Login, Profile management
+*/
 
 const { Types } = require("mongoose");
 
 export default {
-
-    signupT: (req, res, next) => {
-
-        const { firstName, lastName, emailAddress, password, confirmPassword, location, role, bio, checkProductUpdates, checkCommunityAnnouncementes, dataVerificationUpdates, accountNotification, paymentMethod } = req.body;
-        console.log(req.body);
- 
-        const user = new UserModel({
-            firstName: firstName.toLowerCase,
-            lastName: lastName.toLowerCase,
-            emailAddress: emailAddress,
-            password: password,
-            location: location,
-            role: role,
-            bio: bio,
-            checkProductUpdates: checkProductUpdates,
-            checkCommunityAnnouncementes: checkCommunityAnnouncementes,
-            dataVerificationUpdates: dataVerificationUpdates,
-            accountNotification: accountNotification,
-            paymentMethod: paymentMethod
-        })
-
-        user.save((err, savedUser) => {
-            if (err) {
-                return next(err)
-            }
-            res.json({
-                success: true,
-                token: token.generateToken(savedUser)
-            })
-        })
-    },
-
     /**
-     * 
-     * @param {*} req 
+     * @notice Sever accepts signUp request and Generate JWT token and send it to the client
+     * @dev validate signUp request params and find user from user table.
+            if user exists in user table, return false.
+            if user doesn't exist from table, add record user's record and return jwt token.
+     * @param {*} req singUp user info(userName, companyName, emailAddress, password, confirmPassword)
      * @param {*} res 
      * @param {*} next 
-     * @returns 
+     * @returns signUp flag, error string if exist and jwt token
      */
     signup: (req, res, next) => {
 
-        const { username, password, firstName, lastName, confirmPassword } = req.body;
+        const { userName, companyName, emailAddress, password, confirmPassword } = req.body;
 
-        const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
-
-        const realIpAddress = ipAddress.slice(':::ffff'.length)
-
-        if (password !== confirmPassword) {
-            return res
-                .status(422)
-                .send({ error: 'Invalidate confirm password.' });
-        }
-
-        if (!username || !password) {
-            return res
-                .status(423)
-                .send({ error: 'You must provide username and password.' });
-        }
-
-        const existingRealIP = UserModel.findOne({ ipAddress: realIpAddress })
-
-        if (existingRealIP) {
-            return res
-                .status(424)
-                .send({ error: 'You have already signed up with this IP.' });
-        }
+        ValidateData.signUpCheck(userName, companyName, emailAddress, password, confirmPassword);
 
         UserModel
             .findOne({

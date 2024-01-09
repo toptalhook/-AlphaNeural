@@ -6,19 +6,18 @@ const moment = require('moment-timezone');
 
 // Define the model
 const Schema = new mongoose.Schema({
-    firstName: 
-    {
-        type: String,
-        required: true,
-    },
-    lastName: 
+    userName: 
     {
         type: String,
         required: true
     },
+    companyName: {
+        type: String
+    },
     emailAddress: {
         type: String,
         required: true,
+        unique: true,
     },
     password: {
         type: String,
