@@ -4,7 +4,7 @@ import path from 'path';
 if(process.env.NODE_ENV !== 'production'){
   try {
     dotenv.config({
-      path: path.resolve(__dirname, '.env'),
+      // path: path.resolve(__dirname, '.env'),
       silent: true
     });
   } catch (e) {
@@ -38,16 +38,18 @@ if (process.env.DATABASE_URL) {
     dbUrl = "mongodb://127.0.0.1:27017/alphaneural_db";
 }
 
+// console.log("env log", process.env);
+
 var config = {
     database: {
         url: dbUrl,
     },
     server: {
         host: "127.0.0.1",
-        port: "3000",
+        port: process.env.PORT,
     },
     jwt_secret: process.env.JWT_SECRET || 'unsafe_jwt_secret',
-    port: process.env.PORT || 3000
+    port: process.env.PORT || 7777
 
 };
 

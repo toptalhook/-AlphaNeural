@@ -2,3 +2,4 @@
 /back-end/dist
 .git
 front-end/node_modules
+/back-end/src/.env
