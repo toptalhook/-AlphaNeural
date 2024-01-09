@@ -4,7 +4,7 @@ import getLogger from 'loglevel-colored-level-prefix';
  * @author Lee Jin
  * @title Get Logger
  * @notice 
-        Trace logger
+        Trace logger while sever is running
  */
 
 const options = {prefix: 'mern-server', level: 'trace'}

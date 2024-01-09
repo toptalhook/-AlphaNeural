@@ -5,19 +5,18 @@ import express from "express";
 
 /**
  * @notice module from online
- * @module Middlewares JWT token verify handling
- * @module Authentication User sign up handling
  */
 import Middlewares from '../api/middlewares'
 import Authentication from '../api/authentication'
 import UserRouter from '../user/router'
-const router = express.Router()
 
 /**
  * @author Lee Jin
  * @title Application Routes
  * @notice Handle Get and Post request.
 */
+
+const router = express.Router()
 
 /** 
  * @notice Application Routes
@@ -35,7 +34,7 @@ router.get('/ping', (req, res) => res.send('pong'))
  * @notice signup handling
  * @dev call Authentication.signup function
  */
-router.post('/signUp', Authentication.signupT)
+router.post('/signUp', Authentication.signup)
 /**
  * @notice login handling
  * @dev call Authentication.signin function
