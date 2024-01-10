@@ -32,6 +32,7 @@ import logger from './utils/logger';
 import config from './constant/config';
 import routes from './routes/routes';
 import { connectDatabase } from "./utils/dblink";
+import constant from "./constant/constant";
 /**
  * @author Lee Jin
  * @title AlphaNeural AI application.
@@ -101,7 +102,7 @@ app.use('/', routes)
  */
 app.use((err, req, res, next) => {
     logger.error(err.message);
-    res.status(422).json(err.message);
+    res.status(constant.STATUS_INTERNAL_SERVER_ERROR).json(err.message);
 });
 
 /**

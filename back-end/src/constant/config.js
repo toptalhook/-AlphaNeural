@@ -1,6 +1,12 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
+/**
+ * @author Lee Jin
+ * @title Backend config
+ */
+
+//If sever is not run as a production
 if(process.env.NODE_ENV !== 'production'){
   try {
     dotenv.config({
@@ -13,7 +19,7 @@ if(process.env.NODE_ENV !== 'production'){
 }
 
 var dbUrl;
-
+// get dburl form env file
 if (process.env.DATABASE_URL) {
     dbUrl = process.env.DATABASE_URL;
 } else if (

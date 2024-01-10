@@ -1,7 +1,9 @@
 import token from '../utils/token';
 import UserModel from '../user/model';
+import UserController from '../user/controller';
 import bcrypt from 'bcrypt-nodejs';
 import ValidateData from './validate';
+import constant from "../constant/constant";
 
 /**
  * @author Lee Jin
@@ -26,93 +28,37 @@ export default {
 
         const { userName, companyName, emailAddress, password, confirmPassword } = req.body;
 
-        ValidateData.signUpCheck(userName, companyName, emailAddress, password, confirmPassword);
+        const checkedData = ValidateData.signUpCheck(userName, companyName, emailAddress, password, confirmPassword);
+        // console.log("validate", checkedData);
+        if(!checkedData.flag) {
+            return res.status(constant.STATUS_VALIDATE_ERROR).send(checkedData.error);
+        }
 
-        UserModel
-            .findOne({
-                userName: username
-            }, (err, existingUser) => {
-
-                if (err) return res.status(422).send(err);
-                console.log('we are here', existingUser)
-                if (existingUser) {
-                    return res
-                        .status(425)
-                        .send({ error: 'Username is in use' });
-                }
-
-                const user = new UserModel({
-                    firstName: firstName,
-                    lastName: lastName,
-                    userName: username.toLowerCase(),
-                    password: password,
-                    approve: false,
-                    sex: 'Male',
-                    birthday: Date.now(),
-                    ipAddress: realIpAddress
-                })
-
-                user.save((err, savedUser) => {
-                    if (err) {
-                        return next(err)
-                    }
-                    res.json({
-                        success: true,
-                        token: token.generateToken(savedUser)
-                    })
-                })
-            })
+        UserController.insertNewUser(req, res, next);
     },
 
+    /**
+     * @notice User login handling
+     * @dev find a user from user table by email address and compare password.
+     * @param {*} res 
+     * @param {*} next 
+     * @returns signUp flag, error string if exist and jwt token
+     */
     signin: (req, res, next) => {
-        const username = req.body.username;
+        console.log(req.body);
+        const emailAddress = req.body.emailAddress;
         const password = req.body.password;
 
-        const ipAddress = req.header('x-forwarded-for') || req.socket.remoteAddress;
-
-        const realIpAddress = ipAddress.slice(':::ffff'.length);
-
-        console.log("+++++++++++++++++++++Login Attempt++++++++++", username, realIpAddress, password)
+        console.log("+++++++++++++++++++++Login Attempt++++++++++", emailAddress, password)
 
         console.log('==========we meet the user============')
 
-        if (!username || !password) {
+        if (!emailAddress || !password) {
             return res
-                .status(422)
+                .status(constant.STATUS_VALIDATE_ERROR)
                 .send({ error: 'You must provide username and password.' });
         }
-        UserModel
-            .findOne({
-                userName: { $regex: new RegExp(username, "i") }
-            }, (err, existingUser) => {
-                if (err || !existingUser || existingUser.deletedAt) {
-                    return res.status(401).send({ error: "User Not Found" })
-                }
-                if (existingUser) {
-                    console.log('PASSWORD=', password);
-                    console.log(existingUser.password);
-                    existingUser.comparedPassword(password, function (err, good) {
-                        console.log('===================2=');
-                        console.log(err);
-                        console.log(good);
-                        console.log('===================1=');
-                        if (err || !good) {
-                            return res.status(402).send(err || { error: "Your password is not correct" })
-                        }
-                        if (existingUser.ipAddress != realIpAddress) {
-                            return res.status(403).send(err || { error: "User Not Allowed From That IP Address" })
-                        }
-                        if (!existingUser.approve) {
-                            return res.status(404).send("Please wait until you are approved.")
-                        }
-                        res.cookie('name', 'value', { maxAge: 180000 });
-                        res.send({
-                            user: existingUser,
-                            token: token.generateToken(existingUser)
-                        })
-                    })
-                }
-            })
+        UserController.signIn(req, res, next);
     },
 
     resetPassword: async (req, res, next) => {
