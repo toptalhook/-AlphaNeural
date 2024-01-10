@@ -85,28 +85,33 @@ export default {
         const emailAddress = req.body.emailAddress;
         const password = req.body.password;
         console.log("email address", emailAddress);
+        // const emailAddress = (id) => {
+        //     return Types.ObjectId(id);
+        // };
         UserModel
             .findOne({
-                emailAddress: { emailAddress }
+                emailAddress: emailAddress
             }, (err, existingUser) => {
-                console.log(err);
+                // console.log(err);
                 if (err || !existingUser || existingUser.deletedAt) {
                     return res.status(constant.STATUS_VALIDATE_ERROR).send({ error: "User Not Found" })
                 }
+                // if user exists, compare password from request to password from database 
                 if (existingUser) {
-                    console.log('PASSWORD=', password);
-                    console.log(existingUser.password);
+                    // console.log('PASSWORD=', password);
+                    // console.log(existingUser.password);
                     existingUser.comparedPassword(password, function (err, good) {
-                        console.log('===================2=');
-                        console.log(err);
-                        console.log(good);
-                        console.log('===================1=');
+                        // console.log('===================2=');
+                        // console.log(err);
+                        // console.log(good);
+                        // console.log('===================1=');
                         if (err || !good) {
                             return res.status(constant.STATUS_VALIDATE_ERROR).send(err || { error: "Your password is not correct" })
                         }
                         // if (!existingUser.approve) {
                         //     return res.status(404).send("Please wait until you are approved.")
                         // }
+                        // Make a cookie for expire time
                         res.cookie('name', 'value', { maxAge: 180000 });
                         res.send({
                             user: existingUser,
