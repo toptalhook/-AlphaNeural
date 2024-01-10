@@ -59,7 +59,7 @@ const isStrongPassword = (password, min, max, uppercase, lowercase, digits, symb
     .is().min(min)                                  // Minimum length 8
     .is().max(max)                                  // Maximum length 100
     .has().digits(digits)
-    .has().symbols(symbols)                           // Must have at least 2 digits
+    .has().symbols(symbols)                         // Must have at least 2 digits
     .is().not().oneOf(blacklist);                   // Blacklist these values
 
     if(uppercase) {
@@ -99,6 +99,8 @@ const userEmailAddressCheck = (emailAddress) => {
             error: "emailAddress is invalid"
         };
     }
+
+    // email is validated
     return {
         flag: true,
         error: ""

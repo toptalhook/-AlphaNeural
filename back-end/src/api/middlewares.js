@@ -1,5 +1,7 @@
 import UserModel from '../user/model';
 import token from '../utils/token';
+import UserController from '../user/controller';
+import constant from "../constant/constant";
 
 /**
  * @author Lee Jin
@@ -19,25 +21,15 @@ import token from '../utils/token';
 export default {
   loginRequired: (req, res, next) => {
     // Check header authorization
-    if (!req.header('Authorization')) return res.status(401).send({ message: 'Please make sure your request has an Authorization header.' });
+    if (!req.header('Authorization')) return res.status(constant.STATUS_UNAUTHORISED).send({ message: 'Please make sure your request has an Authorization header.' });
     // Validate jwt
     let try_token = req.header('Authorization').split(' ')[1];
 
     //VerifyToken
     token.verifyToken(try_token, (err, payload) => {
-      if (err) return res.status(401).send(err);
+      if (err) return res.status(constant.STATUS_UNAUTHORISED).send(err);
       //Find a jwt token
-      UserModel.findById(payload.sub)
-        .exec((err, user) => {
-          if (err || !user) {
-            return res.status(404).send(err || {
-              error: 'middleware User not found!!!'
-            });
-          }
-          delete user.password;
-          req.user = user;
-          next();
-        })
+      UserController.getUserById(req, res, next, payload.sub);
     })
   }
 }

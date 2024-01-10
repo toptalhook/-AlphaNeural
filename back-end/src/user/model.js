@@ -2,6 +2,12 @@ import mongoose from 'mongoose';
 import timeZone from "mongoose-timezone";
 import bcrypt from 'bcrypt-nodejs';
 
+/**
+ * @author Lee Jin
+ * @title User Model
+ * @notice CRUD for user table
+*/
+
 const moment = require('moment-timezone');
 
 // Define the model
@@ -25,7 +31,7 @@ const Schema = new mongoose.Schema({
     },
     location: {
         type: String,
-        required: true
+        // required: true
     },
     role: {
         type: Number,
@@ -33,7 +39,7 @@ const Schema = new mongoose.Schema({
     },
     bio: {
         type: String,
-        required: true
+        // required: true
     },
     checkProductUpdates: {
         type: Boolean,
@@ -67,6 +73,7 @@ const Schema = new mongoose.Schema({
 
 Schema.plugin(timeZone, { path: ['createdAt'] });
 
+// This function will be called before save data
 Schema.pre('save', function (next) {
     // get access to user model, then we can use user.email, user.password
     const user = this;
@@ -85,11 +92,7 @@ Schema.pre('save', function (next) {
 
 // Make use of methods for comparedPassword
 Schema.methods.comparedPassword = function (candidatePassword, cb) {
-    console.log('-----------------', candidatePassword, this.password)
     bcrypt.compare(candidatePassword, this.password, function (err, good) {
-        console.log(err);
-        console.log(good);
-        console.log('===============');
         if (err) { return cb(err) }
         cb(null, good);
     })
