@@ -45,14 +45,14 @@ export default {
      * @returns signUp flag, error string if exist and jwt token
      */
     signin: (req, res, next) => {
-        console.log(req.body);
+        // console.log(req.body);
         const emailAddress = req.body.emailAddress;
         const password = req.body.password;
 
-        console.log("+++++++++++++++++++++Login Attempt++++++++++", emailAddress, password)
+        // console.log("+++++++++++++++++++++Login Attempt++++++++++", emailAddress, password)
 
-        console.log('==========we meet the user============')
-
+        // console.log('==========we meet the user============')
+        // validate emailAddress and password
         if (!emailAddress || !password) {
             return res
                 .status(constant.STATUS_VALIDATE_ERROR)

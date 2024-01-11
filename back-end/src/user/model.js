@@ -15,19 +15,19 @@ const Schema = new mongoose.Schema({
     userName: 
     {
         type: String,
-        required: true
+        required: [true, "Please add a user name"]
     },
     companyName: {
         type: String
     },
     emailAddress: {
         type: String,
-        required: true,
+        required: [true, "Please add an email"],
         unique: true,
     },
     password: {
         type: String,
-        rquired: true,
+        rquired: [true, "Please add a password"],
     },
     location: {
         type: String,
