@@ -112,7 +112,7 @@ export default {
                         //     return res.status(404).send("Please wait until you are approved.")
                         // }
                         // Make a cookie for expire time
-                        res.cookie('name', 'value', { maxAge: 180000 });
+                        res.cookie('name', 'value', { maxAge: 86400 });
                         res.send({
                             user: existingUser,
                             token: token.generateToken(existingUser)
